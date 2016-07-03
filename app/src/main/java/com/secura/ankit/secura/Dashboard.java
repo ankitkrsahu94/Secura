@@ -1,5 +1,7 @@
 package com.secura.ankit.secura;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +21,7 @@ public class Dashboard extends AppCompatActivity {
 
     String[] mobileArray = {"Android","IPhone"};
     ArrayList<String> list = new ArrayList<String>();
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,21 +42,43 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
-        try{
-            this.deleteDatabase(SecuraDBHelper.DATABASE_NAME);
-        }catch (Exception e){
-            e.printStackTrace();
+        pd = new ProgressDialog(this);
+        pd.setMessage("Fetching Data");
+        pd.show();
+
+        new FetchGroups().execute("");
+    }
+
+    private class FetchGroups extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try{
+                getApplicationContext().deleteDatabase(SecuraDBHelper.DATABASE_NAME);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
+            db.insertItem("Allahabad Bank");
+            db.insertItem("Axis Bank");
+            list = db.getItems();
+            db.close();
+            return "";
         }
-        SecuraDBHelper db = new SecuraDBHelper(this);
 
-        db.insertItem("Allahabad Bank");
-        db.insertItem("Axis Bank");
-        list = db.getItems();
-        db.close();
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.listrowview, list);
+        @Override
+        protected void onPostExecute(String result) {
+            ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listrowview, list);
+            ListView listView = (ListView) findViewById(R.id.accountList);
+            listView.setAdapter(adapter);
+            pd.hide();
+        }
 
-        ListView listView = (ListView) findViewById(R.id.accountList);
-        listView.setAdapter(adapter);
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
     }
 
     @Override
