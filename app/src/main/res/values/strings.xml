@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Secura</string>
+    <string name="new_item">Create a new item</string>
     <string name="action_settings">Settings</string>
 </resources>
