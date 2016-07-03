@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), NewItemActivity.class);
+                intent.putStringArrayListExtra("GROUP_LIST", list);
                 startActivityForResult(intent,1);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -64,8 +66,9 @@ public class Dashboard extends AppCompatActivity {
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
             db.insertItem("Allahabad Bank");
             db.insertItem("Axis Bank");
-            list = db.getItems();
-            db.close();
+            list = db.getGroups(SecuraDBHelper.email);
+            //db.close();
+            Log.e("Fuck : I m here", "");
             return "";
         }
 

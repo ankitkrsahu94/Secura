@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.secura.ankit.secura.DatabaseSchema.SecuraContract;
 
@@ -22,7 +23,7 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Secura.db";
 
-    String email = "testuser@xyz.com";
+    public static String email = "testuser@xyz.com";
 
     public SecuraDBHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,7 +58,7 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("select user_id from " + SecuraContract.UserTable.TABLE_NAME + " where email_id = \"" + email + "\"", null);
         res.moveToFirst();
         userID = res.getInt(res.getColumnIndex(SecuraContract.UserGroupMap.USER_ID));
-        db.close();
+        //db.close();
         return userID;
     }
 
@@ -97,8 +98,9 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         int mapID;
         insertUser(email, "password");
         getUser(email);
-        createGroupMap("TestGroup", email);
-        mapID = getGroupMapID("TestGroup", "testuser@xyz.com");
+        createGroupMap("TestGroup 1", email);
+        createGroupMap("TestGroup 2", email);
+        mapID = getGroupMapID("TestGroup 1", "testuser@xyz.com");
         SQLiteDatabase db = this.getWritableDatabase();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
@@ -123,6 +125,22 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
         while(!res.isAfterLast()){
             list.add(res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.ITEM_TITLE)));
+            res.moveToNext();
+        }
+
+        db.close();
+        return list;
+    }
+
+    public ArrayList<String> getGroups(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> list = new ArrayList<>();
+        int userID = getUser(email);
+        Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupMap.TABLE_NAME + " where user_id = " + userID, null);
+
+        res.moveToFirst();
+        while(!res.isAfterLast()){
+            list.add(res.getString(res.getColumnIndex(SecuraContract.UserGroupMap.GROUP_NAME)));
             res.moveToNext();
         }
 
