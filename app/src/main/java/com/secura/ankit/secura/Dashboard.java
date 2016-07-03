@@ -11,15 +11,23 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
+
+import java.util.ArrayList;
+
 public class Dashboard extends AppCompatActivity {
 
-    String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry","WebOS","Ubuntu","Windows7","Max OS X","Android","IPhone","WindowsMobile","Blackberry","WebOS","Ubuntu","Windows7","Max OS X"};
+    String[] mobileArray = {"Android","IPhone"};
+    ArrayList<String> list = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        /*for(int i=0; i <mobileArray.length; i++){
+            list.add(mobileArray[i]);
+        }*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -29,9 +37,20 @@ public class Dashboard extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });*/
+        });
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.listrowview, mobileArray);
+        try{
+            this.deleteDatabase(SecuraDBHelper.DATABASE_NAME);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        SecuraDBHelper db = new SecuraDBHelper(this);
+
+        db.insertItem("Allahabad Bank");
+        db.insertItem("Axis Bank");
+        list = db.getItems();
+        db.close();
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.listrowview, list);
 
         ListView listView = (ListView) findViewById(R.id.accountList);
         listView.setAdapter(adapter);
