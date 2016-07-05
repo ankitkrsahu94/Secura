@@ -1,4 +1,4 @@
-package com.secura.ankit.secura.DatabaseSchema;
+package com.secura.ankit.secura;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -8,10 +8,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,10 +21,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
-import com.secura.ankit.secura.DatabaseSchema.GroupItems;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Dashboard extends AppCompatActivity {
@@ -61,7 +57,8 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), GroupItems.class);
-                intent.putExtra("groupID", )
+                intent.putExtra("groupID", 1);
+                startActivity(intent);
                 Toast.makeText(Dashboard.this, parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
             }
         });
