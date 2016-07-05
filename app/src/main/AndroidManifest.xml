@@ -23,6 +23,11 @@
             android:label="@string/new_item"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".GroupItems"
+            android:label="@string/all_item"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

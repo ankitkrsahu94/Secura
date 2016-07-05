@@ -13,6 +13,8 @@ import java.security.AccessControlContext;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by Vassar-Dell-4 on 03-Jul-16.
@@ -49,15 +51,17 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         contentValues.put(SecuraContract.UserTable.EMAIL_ID, email);
         contentValues.put(SecuraContract.UserTable.PASSWORD, password);
         db.insert(SecuraContract.UserTable.TABLE_NAME, null, contentValues);
-        db.close();
+        //db.close();
     }
 
     public int getUser(String email){
-        int userID;
+        int userID = -1;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select user_id from " + SecuraContract.UserTable.TABLE_NAME + " where email_id = \"" + email + "\"", null);
-        res.moveToFirst();
-        userID = res.getInt(res.getColumnIndex(SecuraContract.UserGroupMap.USER_ID));
+        if(res.getCount() > 0){
+            res.moveToFirst();
+            userID = res.getInt(res.getColumnIndex(SecuraContract.UserGroupMap.USER_ID));
+        }
         //db.close();
         return userID;
     }
@@ -69,6 +73,11 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         Date date = new Date();
 
+        if(userID == -1){
+            insertUser(email, "password");
+            userID = getUser(email);
+        }
+
         contentValues.put(SecuraContract.UserGroupMap.GROUP_NAME, groupName);
         contentValues.put(SecuraContract.UserGroupMap.DATE_ADDED, dateFormat.format(date));
         contentValues.put(SecuraContract.UserGroupMap.USER_ID, userID);
@@ -77,18 +86,20 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
     }
 
     public int getGroupMapID(String groupName, String email){
-        int mapID=1;
+        int mapID = -1;
         int userID = getUser(email);
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select " + SecuraContract.UserGroupMap.GROUP_ID + " from " +
-                SecuraContract.UserGroupMap.TABLE_NAME + " where " +
-                SecuraContract.UserGroupMap.GROUP_NAME + " = \"" + groupName + "\"" +
-                "and " +
-                SecuraContract.UserGroupMap.USER_ID + " = " + userID, null);
+        if(userID > -1){
+            Cursor res = db.rawQuery("select " + SecuraContract.UserGroupMap.GROUP_ID + " from " +
+                    SecuraContract.UserGroupMap.TABLE_NAME + " where " +
+                    SecuraContract.UserGroupMap.GROUP_NAME + " = \"" + groupName + "\"" +
+                    "and " +
+                    SecuraContract.UserGroupMap.USER_ID + " = " + userID, null);
 
-        res.moveToFirst();
-        mapID = res.getInt(res.getColumnIndex(SecuraContract.UserGroupMap.GROUP_ID));
+            res.moveToFirst();
+            mapID = res.getInt(res.getColumnIndex(SecuraContract.UserGroupMap.GROUP_ID));
+        }
         db.close();
         return mapID;
     }
@@ -132,16 +143,48 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<String> getGroups(String email){
+    /*public ArrayList<String> getGroups(String email){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<String> list = new ArrayList<>();
         int userID = getUser(email);
-        Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupMap.TABLE_NAME + " where user_id = " + userID, null);
 
-        res.moveToFirst();
-        while(!res.isAfterLast()){
-            list.add(res.getString(res.getColumnIndex(SecuraContract.UserGroupMap.GROUP_NAME)));
-            res.moveToNext();
+        if(userID > -1){
+            Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupMap.TABLE_NAME + " where user_id = " + userID, null);
+            res.moveToFirst();
+            while(!res.isAfterLast()){
+                list.add(res.getString(res.getColumnIndex(SecuraContract.UserGroupMap.GROUP_NAME)));
+                res.moveToNext();
+            }
+        }
+        else{
+            return new ArrayList<>();
+        }
+
+        db.close();
+        return list;
+    }*/
+
+    public LinkedHashMap<Integer, String> getGroups(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        LinkedHashMap<Integer, String> list = new LinkedHashMap<>();
+        int userID = getUser(email);
+        int key;
+        String val;
+
+        if(userID > -1){
+            Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupMap.TABLE_NAME + " where user_id = " + userID
+                    + "", null);
+            res.moveToFirst();
+            while(!res.isAfterLast()){
+                key = res.getInt(res.getColumnIndex(SecuraContract.UserGroupMap.GROUP_ID));
+                val = res.getString(res.getColumnIndex(SecuraContract.UserGroupMap.GROUP_NAME));
+                list.put(key, val);
+                //Log.e("ID : ", key + "");
+                res.moveToNext();
+            }
+        }
+        else{
+            return new LinkedHashMap<>();
         }
 
         db.close();
