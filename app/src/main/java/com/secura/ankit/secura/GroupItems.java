@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.zip.Inflater;
 
 public class GroupItems extends AppCompatActivity {
 
@@ -85,13 +87,18 @@ public class GroupItems extends AppCompatActivity {
         alertDialog.setTitle("Add new item");
         alertDialog.setMessage("Title");
 
-        final EditText input = new EditText(getApplicationContext());
+        LayoutInflater inflater = (LayoutInflater)this.getSystemService(GroupItems.this.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.newgroupitem, null);
+        alertDialog.setView(dialogView);
+
+
+        /*final EditText input = new EditText(getApplicationContext());
         input.setTextColor(Color.parseColor("#000000"));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         input.setLayoutParams(lp);
-        alertDialog.setView(input);
+        alertDialog.setView(input);*/
         //alertDialog.setIcon(R.drawable.key);
 
         alertDialog.setPositiveButton("Save",
