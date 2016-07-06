@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 public class Dashboard extends AppCompatActivity {
 
     ArrayList<String> list = new ArrayList<String>();
+    LinkedHashMap<Integer, String> result;
     ProgressDialog pd;
     ListView listView;
 
@@ -57,9 +58,9 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), GroupItems.class);
-                intent.putExtra("groupID", 1);
+                intent.putExtra("groupID", Integer.parseInt(result.keySet().toArray()[position].toString()));
                 startActivity(intent);
-                Toast.makeText(Dashboard.this, parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Dashboard.this, result.keySet().toArray()[position].toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -144,7 +145,7 @@ public class Dashboard extends AppCompatActivity {
             /**
              * since all the group information is returned as <key,value> pair
              */
-            LinkedHashMap<Integer, String> result = db.getGroups(SecuraDBHelper.email);
+            result = db.getGroups(SecuraDBHelper.email);
             list.clear();
             for (Object value : result.values()) {
                 //Log.e("D ID : ", value.toString());

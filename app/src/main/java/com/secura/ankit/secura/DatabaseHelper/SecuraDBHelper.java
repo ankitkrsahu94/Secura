@@ -128,7 +128,7 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         return 1;
     }
 
-    public ArrayList<String> getItems(){
+    /*public ArrayList<String> getItems(){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<String> list = new ArrayList<>();
         Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupItemMap.TABLE_NAME, null);
@@ -136,6 +136,25 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
         while(!res.isAfterLast()){
             list.add(res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.ITEM_TITLE)));
+            res.moveToNext();
+        }
+
+        db.close();
+        return list;
+    }*/
+
+    public LinkedHashMap<Integer, String> getItems(int map_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        LinkedHashMap<Integer, String> list = new LinkedHashMap<Integer, String>();
+        int key;
+        String val;
+        Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupItemMap.TABLE_NAME + " where map_id = " + map_id, null);
+
+        res.moveToFirst();
+        while(!res.isAfterLast()){
+            key = res.getInt(res.getColumnIndex(SecuraContract.UserGroupItemMap.ITEM_ID));
+            val = res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.ITEM_TITLE));
+            list.put(key, val);
             res.moveToNext();
         }
 
