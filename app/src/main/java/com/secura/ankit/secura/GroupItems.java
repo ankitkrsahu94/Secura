@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -22,6 +23,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -39,6 +43,8 @@ public class GroupItems extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
+        final Intent intent = getIntent();
+        groupID = intent.getIntExtra("groupID", -1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,7 +53,8 @@ public class GroupItems extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewGroupDialog();
+                //Toast.makeText(GroupItems.this, groupID+"", Toast.LENGTH_SHORT).show();
+                createNewGroupItemDialog();
                 /*Intent intent = new Intent(getApplicationContext(), NewItemActivity.class);
                 intent.putStringArrayListExtra("GROUP_LIST", list);
                 startActivityForResult(intent,1);*/
@@ -69,11 +76,9 @@ public class GroupItems extends AppCompatActivity {
         pd = new ProgressDialog(this);
         pd.setMessage("Fetching Data");
         pd.show();
-        Intent intent = getIntent();
-        groupID = intent.getIntExtra("groupID", -1);
         //groupID = Integer.valueOf(intent.getIntExtra("groupID", -1));
         //Toast.makeText(GroupItems.this, String.valueOf(groupID), Toast.LENGTH_SHORT).show();
-        new FetchItems().execute(String.valueOf(groupID));
+        new FetchItems().execute();
     }
 
     @Override
@@ -82,7 +87,8 @@ public class GroupItems extends AppCompatActivity {
         pd.dismiss();
     }
 
-    private void createNewGroupDialog(){
+    private void createNewGroupItemDialog(){
+        //Toast.makeText(GroupItems.this, groupID, Toast.LENGTH_SHORT).show();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(GroupItems.this);
         alertDialog.setTitle("Add new item");
         alertDialog.setMessage("Title");
@@ -105,9 +111,9 @@ public class GroupItems extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         pd = new ProgressDialog(GroupItems.this);
-                        pd.setMessage("Creating new group");
+                        pd.setMessage("Creating new group item");
                         pd.show();
-                        //new CreateGroup().execute(input.getText().toString());
+                        new CreateGroupItem().execute();
                         dialog.cancel();
                     }
                 });
@@ -122,19 +128,42 @@ public class GroupItems extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private class CreateGroup extends AsyncTask<String, Void, String> {
+    private class CreateGroupItem extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
-            db.createGroupMap(params[0], SecuraDBHelper.email);
+            /**
+             *
+             {
+             "system":{
+                        "type":"facebook_login"
+                    }
+             }
+             */
+
+            JSONObject jArrayItemData = new JSONObject();
+            JSONObject jObjectType = new JSONObject();
+            try {
+                jObjectType.put("type", "facebook_login");
+                jArrayItemData.put("system", jObjectType);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // put elements into the object as a key-value pair
+            //Toast.makeText(GroupItems.this, groupID+"in", Toast.LENGTH_SHORT).show();
+            //pd.dismiss();
+            //Log.e("Fuck : GroupID", groupID+"");
+            db.insertItem(groupID, "Item 1", jArrayItemData);
             //group_list = db.getItems();
-            return params[0];
+            return "";
         }
 
         @Override
         protected void onPostExecute(String result) {
             new FetchItems().execute();
+            pd.dismiss();
         }
 
         @Override
@@ -161,7 +190,7 @@ public class GroupItems extends AppCompatActivity {
             /**
              * since all the group information is returned as <key,value> pair
              */
-            LinkedHashMap<Integer, String> result = db.getItems(Integer.parseInt(params[0]));
+            LinkedHashMap<Integer, String> result = db.getItems(groupID);
             list.clear();
             for (Object value : result.values()) {
                 //Log.e("D ID : ", value.toString());

@@ -127,7 +127,7 @@ public class NewItemActivity extends Activity {
         @Override
         protected String doInBackground(String... params) {
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
-            db.insertItem(params[0]);
+            //db.insertItem(params[0]);
             //group_list = db.getItems();
             db.close();
             return params[0];
