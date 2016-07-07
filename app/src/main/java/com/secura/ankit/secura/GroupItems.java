@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
@@ -94,9 +95,32 @@ public class GroupItems extends AppCompatActivity {
         alertDialog.setMessage("Title");
 
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(GroupItems.this.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.newgroupitem, null);
+        final View dialogView = inflater.inflate(R.layout.newgroupitem, null);
         alertDialog.setView(dialogView);
 
+        Spinner sp = (Spinner) dialogView.findViewById(R.id.itemType);
+
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 1:
+                        dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
+                        dialogView.findViewById(R.id.loginData).setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        dialogView.findViewById(R.id.loginData).setVisibility(View.GONE);
+                        dialogView.findViewById(R.id.cardData).setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         /*final EditText input = new EditText(getApplicationContext());
         input.setTextColor(Color.parseColor("#000000"));
