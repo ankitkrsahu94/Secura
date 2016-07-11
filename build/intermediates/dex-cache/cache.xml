@@ -1,2 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.4.0_4ee78e34039735e145d476ae0bf2017e2ca6d24a/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="525818babd25f1d6c214249c29c5b791e4ab3264">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_5bdda8cc6c9b78824768a14fb8b402c4b1183815/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_1edf657b9935559319a6212a3ce8e71967ce58b8/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.4.0_d409bf572c1129a1f474c6c83aa913f978df3860/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.4.0_d3a96c103c57a5954bfcb9cca4d54d27d0fb9dc9/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.4.0_9bfd2b30291a0475f7ac40cb1f491b7e327c8c73/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="3d1e5e19efe5933e6a50dea7313a44df1ace5a63">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_de951a7d235efd58e7dc15af08176c230475254d/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.4.0_6758d98a63007943eb1ff52d5b427b3f9707fdaf/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.4.0_7e74b20e982ca011dfbfdfb6ae984e23db38dbb7/classes.dex" />
+    </item>
+    <item
+        jar="/home/ankit/Documents/Secura/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="/home/ankit/Documents/Secura/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.4.0_bd5374a1fa269127a9576a8306db12b4df2641ce/classes.dex" />
+    </item>
+
+</items>

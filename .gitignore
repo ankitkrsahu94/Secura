@@ -1,3 +1,4 @@
 .idea/
 .gradle/
 app/app.iml
+build/intermediates/dex-cache/
