@@ -18,7 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
 
@@ -27,11 +26,10 @@ import java.util.LinkedHashMap;
 
 public class Dashboard extends AppCompatActivity {
 
-    ArrayList<String> list = new ArrayList<String>();
+    ArrayList<String> list = new ArrayList<>();
     LinkedHashMap<Integer, String> result;
     ProgressDialog pd;
     ListView listView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +40,19 @@ public class Dashboard extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.accountList);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNewGroupDialog();
-                /*Intent intent = new Intent(getApplicationContext(), NewItemActivity.class);
-                intent.putStringArrayListExtra("GROUP_LIST", list);
-                startActivityForResult(intent,1);*/
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-            }
-        });
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    createNewGroupDialog();
+                    /*Intent intent = new Intent(getApplicationContext(), NewItemActivity.class);
+                    intent.putStringArrayListExtra("GROUP_LIST", list);
+                    startActivityForResult(intent,1);*/
+                    /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();*/
+                }
+            });
+        }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -69,6 +69,12 @@ public class Dashboard extends AppCompatActivity {
         pd.show();
 
         new FetchGroups().execute("");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        pd.dismiss();
     }
 
     private void createNewGroupDialog(){
@@ -159,7 +165,7 @@ public class Dashboard extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listrowview, list);
+            ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.listrowview, list);
             listView.setAdapter(adapter);
             pd.hide();
         }
@@ -197,10 +203,5 @@ public class Dashboard extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void listItemClickListener(ArrayAdapter adapter, View v, int position,
-                                      long arg3) {
-        Toast.makeText(getApplicationContext(), adapter.getItem(position).toString(), Toast.LENGTH_SHORT).show();
     }
 }

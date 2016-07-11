@@ -67,6 +67,7 @@ public class GroupItems extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(GroupItems.this, listView.getItemAtPosition(position)+" info", Toast.LENGTH_SHORT).show();
                 /*Intent intent = new Intent(getApplicationContext(), GroupItems.class);
                 intent.putExtra("groupID", 1);
                 startActivity(intent);
@@ -92,7 +93,7 @@ public class GroupItems extends AppCompatActivity {
         //Toast.makeText(GroupItems.this, groupID, Toast.LENGTH_SHORT).show();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(GroupItems.this);
         alertDialog.setTitle("Add new item");
-        alertDialog.setMessage("Title");
+        //alertDialog.setMessage("Title");
 
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(GroupItems.this.LAYOUT_INFLATER_SERVICE);
         final View dialogView = inflater.inflate(R.layout.newgroupitem, null);
@@ -105,6 +106,10 @@ public class GroupItems extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
+                    case 0:
+                        dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
+                        dialogView.findViewById(R.id.loginData).setVisibility(View.GONE);
+                        break;
                     case 1:
                         dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.loginData).setVisibility(View.VISIBLE);
