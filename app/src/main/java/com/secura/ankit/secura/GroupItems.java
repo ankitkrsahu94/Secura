@@ -38,7 +38,8 @@ public class GroupItems extends AppCompatActivity {
     ProgressDialog pd;
     ListView listView;
     int groupID;
-
+    View dialogView;
+    LinkedHashMap<Integer, String> result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,9 @@ public class GroupItems extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(GroupItems.this, listView.getItemAtPosition(position)+" info", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), GroupItemInfo.class);
+                intent.putExtra("map_ID", Integer.parseInt(result.keySet().toArray()[position].toString()));
+                startActivity(intent);
                 /*Intent intent = new Intent(getApplicationContext(), GroupItems.class);
                 intent.putExtra("groupID", 1);
                 startActivity(intent);
@@ -96,7 +100,7 @@ public class GroupItems extends AppCompatActivity {
         //alertDialog.setMessage("Title");
 
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(GroupItems.this.LAYOUT_INFLATER_SERVICE);
-        final View dialogView = inflater.inflate(R.layout.newgroupitem, null);
+        dialogView = inflater.inflate(R.layout.newgroupitem, null);
         alertDialog.setView(dialogView);
 
         Spinner sp = (Spinner) dialogView.findViewById(R.id.itemType);
@@ -109,14 +113,22 @@ public class GroupItems extends AppCompatActivity {
                     case 0:
                         dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.loginData).setVisibility(View.GONE);
+                        dialogView.findViewById(R.id.internetBanking).setVisibility(View.GONE);
                         break;
                     case 1:
                         dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.loginData).setVisibility(View.VISIBLE);
+                        dialogView.findViewById(R.id.internetBanking).setVisibility(View.GONE);
                         break;
                     case 2:
                         dialogView.findViewById(R.id.loginData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.cardData).setVisibility(View.VISIBLE);
+                        dialogView.findViewById(R.id.internetBanking).setVisibility(View.GONE);
+                        break;
+                    case 3:
+                        dialogView.findViewById(R.id.loginData).setVisibility(View.GONE);
+                        dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
+                        dialogView.findViewById(R.id.internetBanking).setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -219,7 +231,7 @@ public class GroupItems extends AppCompatActivity {
             /**
              * since all the group information is returned as <key,value> pair
              */
-            LinkedHashMap<Integer, String> result = db.getItems(groupID);
+            result = db.getItems(groupID);
             list.clear();
             for (Object value : result.values()) {
                 //Log.e("D ID : ", value.toString());

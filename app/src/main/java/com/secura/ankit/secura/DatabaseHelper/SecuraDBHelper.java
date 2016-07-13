@@ -122,11 +122,13 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         contentValues.put(SecuraContract.UserGroupItemMap.ITEM_TITLE, itemName);
         contentValues.put(SecuraContract.UserGroupItemMap.DATE_ADDED, dateFormat.format(date));
         contentValues.put(SecuraContract.UserGroupItemMap.DATE_MODIFIED, dateFormat.format(date));
-        contentValues.put(SecuraContract.UserGroupItemMap.DATA, String.valueOf(jo));
+        contentValues.put(SecuraContract.UserGroupItemMap.DATA, jo.toString());
         contentValues.put(SecuraContract.UserGroupItemMap.MAP_ID, groupID);
 
         db.insert(SecuraContract.UserGroupItemMap.TABLE_NAME, null, contentValues);
         db.close();
+
+        System.out.println("Fuck : " + jo);
         return 1;
     }
 
@@ -145,12 +147,27 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         return list;
     }*/
 
+    public String getItemInfo(int item_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupItemMap.TABLE_NAME +
+                " where " + SecuraContract.UserGroupItemMap.ITEM_ID + " = " + item_id, null);
+        res.moveToFirst();
+
+        if(res.getCount() > 0){
+            System.out.println("Fuck data : " + res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.DATA)));
+            return res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.DATA));
+        }
+        db.close();
+        return "-1";
+    }
+
     public LinkedHashMap<Integer, String> getItems(int map_id){
         SQLiteDatabase db = this.getReadableDatabase();
         LinkedHashMap<Integer, String> list = new LinkedHashMap<Integer, String>();
         int key;
         String val;
-        Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupItemMap.TABLE_NAME + " where map_id = " + map_id, null);
+        Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupItemMap.TABLE_NAME +
+                " where " + SecuraContract.UserGroupItemMap.MAP_ID + " = " + map_id, null);
 
         res.moveToFirst();
         while(!res.isAfterLast()){

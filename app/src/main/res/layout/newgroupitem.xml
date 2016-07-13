@@ -26,8 +26,12 @@
             android:text="Category"/>
 
         <Spinner
+            style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="-5dp"
+            android:layout_marginTop="5dp"
+            android:spinnerMode="dropdown"
             android:id="@+id/itemType"
             android:entries="@array/array_name"/>
 
@@ -145,6 +149,74 @@
                 android:layout_marginTop="10dp"
                 android:id="@+id/pin"
                 android:hint="PIN"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/internetBanking"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Username" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Password"
+                android:layout_marginTop="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/editText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Transaction Password"
+                android:layout_marginTop="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/editText2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Profile Password"
+                android:layout_marginTop="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/editText3" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show password"
+                android:id="@+id/showPass"
+                android:checked="false"
+                android:layout_marginTop="5dp" />
 
         </LinearLayout>
 
