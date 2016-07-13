@@ -39,7 +39,7 @@ public class NewItemActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newitemlayout);
 
-        //Button save = (Button) findViewById(R.id.saveItem);
+        Button save = (Button) findViewById(R.id.saveItem);
 
         final CheckBox cb = (CheckBox) findViewById(R.id.showPassword);
         final EditText pwd = (EditText) findViewById(R.id.password);
@@ -114,12 +114,12 @@ public class NewItemActivity extends Activity {
             }
         });
 
-        /*save.setOnClickListener(new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NewItemActivity.this.finish();
             }
-        });*/
+        });
     }
 
     private class CreateGroup extends AsyncTask<String, Void, String> {
