@@ -4,13 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -20,20 +18,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
 import com.secura.ankit.secura.utils.DataParser;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.zip.Inflater;
 
 public class GroupItems extends AppCompatActivity {
 
@@ -154,17 +147,15 @@ public class GroupItems extends AppCompatActivity {
         input.setLayoutParams(lp);
         alertDialog.setView(input);*/
         //alertDialog.setIcon(R.drawable.key);
-
         alertDialog.setPositiveButton("Save",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if(infoCategory == -1){
-                            Toast.makeText(GroupItems.this, "No Data was provided", Toast.LENGTH_SHORT).show();
-
+                        if(infoCategory == 0){
+                            Toast.makeText(GroupItems.this, "Please select a category", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             pd.setMessage("Creating new group item");
-                            ArrayList<HashMap<String, String>> filledData = new ArrayList<HashMap<String, String>>();
+                            ArrayList<HashMap<String, String>> filledData = new ArrayList<>();
                             LinearLayout ll = (LinearLayout) dialogView.findViewById(R.id.itemData);
                             String jsonData, title;
 
@@ -180,7 +171,7 @@ public class GroupItems extends AppCompatActivity {
                             }
                             else{
                                 new CreateGroupItem().execute(jsonData, title);
-                                dialog.cancel();
+                                dialog.dismiss();
                             }
                         }
                     }
@@ -189,7 +180,7 @@ public class GroupItems extends AppCompatActivity {
         alertDialog.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                       dialog.dismiss();
                     }
                 });
 
