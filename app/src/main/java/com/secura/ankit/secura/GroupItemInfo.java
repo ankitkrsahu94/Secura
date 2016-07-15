@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
-import com.secura.ankit.secura.utils.Utils;
+import com.secura.ankit.secura.utils.AESHelper;
 
 /**
  * Created by ankit on 13/7/16.
@@ -22,7 +22,7 @@ public class GroupItemInfo extends Activity {
     LinearLayout ll;
     ProgressDialog pd;
 
-    Utils u = new Utils();
+    //AESHelper u = new AESHelper();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +65,14 @@ public class GroupItemInfo extends Activity {
         protected void onPostExecute(String result) {
             System.out.println("Fuck InDATA : " + result);
             try {
-                String encrypted = u.encrypt(result);
-                System.out.println("Fuck encrypted : " + encrypted);
-                String decrypted = u.decrypt(encrypted);
-                System.out.println("Fuck decrypted : " + decrypted);
+                /*String encrypted = u.encrypt(result);
+                System.out.println("Fuck encrypted : " + encrypted);*/
+                String decrypted = AESHelper.decrypt(result);
+                //System.out.println("Fuck decrypted : " + decrypted);
                 /*tv.setText(encrypted);
 
-                String decrypted = u.decrypt(encrypted);
-                tv.setText(decrypted);*/
+                String decrypted = u.decrypt(encrypted);*/
+                tv.setText(decrypted);
             } catch (Exception e) {
                 e.printStackTrace();
             }

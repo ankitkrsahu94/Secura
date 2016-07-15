@@ -196,7 +196,11 @@ public class GroupItems extends AppCompatActivity {
             //Toast.makeText(GroupItems.this, groupID+"in", Toast.LENGTH_SHORT).show();
             //pd.dismiss();
             //Log.e("Fuck : GroupID", groupID+"");
-            db.insertItem(groupID, "Item 1", jArrayItemData);
+            try {
+                db.insertItem(groupID, "Item 1", jArrayItemData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             //group_list = db.getItems();
             return "";
         }

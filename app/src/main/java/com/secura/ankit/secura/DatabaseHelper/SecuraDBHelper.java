@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.secura.ankit.secura.DatabaseSchema.SecuraContract;
+import com.secura.ankit.secura.utils.AESHelper;
 
 import org.json.JSONObject;
 
@@ -107,13 +108,14 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
     }
 
 
-    public int insertItem(int groupID, String itemName, JSONObject jo){
+    public int insertItem(int groupID, String itemName, JSONObject jo) throws Exception {
         //int mapID;
         /*insertUser(email, "password");
         getUser(email);
         createGroupMap("TestGroup 1", email);
         createGroupMap("TestGroup 2", email);
         mapID = getGroupMapID("TestGroup 1", "testuser@xyz.com");*/
+        //AESHelper aesHelper = new AESHelper();
         SQLiteDatabase db = this.getWritableDatabase();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
@@ -122,7 +124,7 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         contentValues.put(SecuraContract.UserGroupItemMap.ITEM_TITLE, itemName);
         contentValues.put(SecuraContract.UserGroupItemMap.DATE_ADDED, dateFormat.format(date));
         contentValues.put(SecuraContract.UserGroupItemMap.DATE_MODIFIED, dateFormat.format(date));
-        contentValues.put(SecuraContract.UserGroupItemMap.DATA, jo.toString());
+        contentValues.put(SecuraContract.UserGroupItemMap.DATA, AESHelper.encrypt(jo.toString()));
         contentValues.put(SecuraContract.UserGroupItemMap.MAP_ID, groupID);
 
         db.insert(SecuraContract.UserGroupItemMap.TABLE_NAME, null, contentValues);
