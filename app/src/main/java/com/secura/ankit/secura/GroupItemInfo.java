@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
+import com.secura.ankit.secura.utils.Utils;
 
 /**
  * Created by ankit on 13/7/16.
@@ -20,6 +21,8 @@ public class GroupItemInfo extends Activity {
     TextView tv;
     LinearLayout ll;
     ProgressDialog pd;
+
+    Utils u = new Utils();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +64,18 @@ public class GroupItemInfo extends Activity {
         @Override
         protected void onPostExecute(String result) {
             System.out.println("Fuck InDATA : " + result);
-            tv.setText(result);
+            try {
+                String encrypted = u.encrypt(result);
+                System.out.println("Fuck encrypted : " + encrypted);
+                String decrypted = u.decrypt(encrypted);
+                System.out.println("Fuck decrypted : " + decrypted);
+                /*tv.setText(encrypted);
+
+                String decrypted = u.decrypt(encrypted);
+                tv.setText(decrypted);*/
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             ll.addView(tv);
             pd.dismiss();
         }
