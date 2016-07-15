@@ -20,10 +20,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
+import com.secura.ankit.secura.utils.DataParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +39,7 @@ public class GroupItems extends AppCompatActivity {
     ArrayList<String> list = new ArrayList<String>();
     ProgressDialog pd;
     ListView listView;
-    int groupID;
+    int groupID, infoCategory;
     View dialogView;
     LinkedHashMap<Integer, String> result;
 
@@ -114,21 +116,25 @@ public class GroupItems extends AppCompatActivity {
                         dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.loginData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.internetBanking).setVisibility(View.GONE);
+                        infoCategory = 0;
                         break;
                     case 1:
                         dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.loginData).setVisibility(View.VISIBLE);
                         dialogView.findViewById(R.id.internetBanking).setVisibility(View.GONE);
+                        infoCategory = 1;
                         break;
                     case 2:
                         dialogView.findViewById(R.id.loginData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.cardData).setVisibility(View.VISIBLE);
                         dialogView.findViewById(R.id.internetBanking).setVisibility(View.GONE);
+                        infoCategory = 2;
                         break;
                     case 3:
                         dialogView.findViewById(R.id.loginData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.cardData).setVisibility(View.GONE);
                         dialogView.findViewById(R.id.internetBanking).setVisibility(View.VISIBLE);
+                        infoCategory = 3;
                         break;
                 }
             }
@@ -151,10 +157,18 @@ public class GroupItems extends AppCompatActivity {
         alertDialog.setPositiveButton("Save",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        pd = new ProgressDialog(GroupItems.this);
-                        pd.setMessage("Creating new group item");
-                        pd.show();
-                        new CreateGroupItem().execute();
+                        if(infoCategory == 0){
+                            Toast.makeText(GroupItems.this, "No Data was provided", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else{
+                            pd.setMessage("Creating new group item");
+                            LinearLayout ll = (LinearLayout) dialogView.findViewById(R.id.itemData);
+                            System.out.println("View : " + ll.getChildAt(infoCategory));
+                            System.out.println("Parsed Data : " + DataParser.llToMap(ll.getChildAt(infoCategory)));
+                        /*pd.show();
+                        new CreateGroupItem().execute();*/
+                        }
                         dialog.cancel();
                     }
                 });
@@ -174,14 +188,6 @@ public class GroupItems extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
-            /**
-             *
-             {
-             "system":{
-                        "type":"facebook_login"
-                    }
-             }
-             */
 
             JSONObject jArrayItemData = new JSONObject();
             JSONObject jObjectType = new JSONObject();
