@@ -115,10 +115,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:weightSum="2">
+                android:weightSum="2"
+                android:id="@+id/cardInfo1">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:text="CVV"/>
                 <EditText
-                    android:layout_width="50dp"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/cvv"
                     android:hint="CVV"
@@ -128,30 +134,40 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginLeft="20dp">
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/cardInfo2">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Expiry date"/>
+                        android:text="Month"
+                        android:visibility="gone"/>
 
                     <EditText
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/expMonth" />
+                        android:id="@+id/expMonth"
+                        android:hint="Month"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="/"/>
+                        android:text="Year"
+                        android:visibility="gone"/>
 
                     <EditText
-                        android:layout_width="50dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/expYear" />
+                        android:id="@+id/expYear"
+                        android:hint="Year"/>
 
                 </LinearLayout>
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PIN"
+                android:visibility="gone"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

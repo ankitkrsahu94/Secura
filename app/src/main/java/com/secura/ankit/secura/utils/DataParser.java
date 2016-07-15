@@ -5,10 +5,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.secura.ankit.secura.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,33 +31,53 @@ public class DataParser {
     public static ArrayList<HashMap<String, String>> llToMap(View view){
         ArrayList<HashMap<String, String>> layoutData = new ArrayList<>();
         LinearLayout ll = (LinearLayout) view.findViewById(view.getId());
-        //pd = new ProgressDialog(GroupItems.this);
         int childcount = ll.getChildCount();
-        //Log.e("YOUO", ll.getChildAt(infoCategory)+"");
-        //Log.e("Length : ", childcount +"");
         for (int i=0; i < childcount; i++){
             View childView = ll.getChildAt(i);
-            System.out.println("ChildView : " + childView);
             if(childView instanceof LinearLayout){
-                for(HashMap<String, String> row : llToMap(childView)){
+                ArrayList<HashMap<String, String>> childData = llToMap(childView);
+                System.out.println(" LL DATA : " + childData);
+                for(HashMap<String, String> row : childData){
                     layoutData.add(row);
                 }
             }
             else{
+                System.out.println("INELSE : ChildView : " + childView);
                 if(childView instanceof TextView){
-                    if(ll.getChildAt(i+1) instanceof EditText) {
-                        HashMap<String, String> elem = new HashMap<>();
+                    System.out.println("Yes it is instance of TextView");
+                    HashMap<String, String> elem = new HashMap<>();
+                    if(ll.getChildAt(i+1) instanceof EditText){
                         elem.put(((TextView) childView).getText().toString(), ((EditText) ll.getChildAt(i+1)).getText().toString());
                         i++;
+                        layoutData.add(elem);
+
                     }
-                    else{
-                        return new ArrayList<HashMap<String, String>>() {{
-                            add(0, new HashMap<String, String>(){{put("error", "-1");}});
-                        }};
+                    else if(ll.getChildAt(i+1) instanceof Spinner){
+                        elem.put(((TextView) childView).getText().toString(), ((Spinner) ll.getChildAt(i+1)).getSelectedItem().toString());
+                        i++;
+                        layoutData.add(elem);
                     }
                 }
             }
         }
         return layoutData;
+    }
+
+    public static String convertToJSON(ArrayList<HashMap<String, String>> data){
+        JSONObject jArrayItemData = new JSONObject();
+        String key, value;
+        //JSONObject jObjectType = new JSONObject();
+        try {
+            for(HashMap<String, String> row: data){
+                key = row.entrySet().iterator().next().getKey();
+                value = row.entrySet().iterator().next().getValue();
+                //System.out.println("ROW : " + row.entrySet().iterator().next().getKey());
+                jArrayItemData.put(key, value);
+            }
+            //jObjectType.put("type", "facebook_login");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jArrayItemData.toString();
     }
 }

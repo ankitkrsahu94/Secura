@@ -108,7 +108,7 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
     }
 
 
-    public int insertItem(int groupID, String itemName, JSONObject jo) throws Exception {
+    public int insertItem(int groupID, String itemName, String jsonData) throws Exception {
         //int mapID;
         /*insertUser(email, "password");
         getUser(email);
@@ -124,13 +124,12 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         contentValues.put(SecuraContract.UserGroupItemMap.ITEM_TITLE, itemName);
         contentValues.put(SecuraContract.UserGroupItemMap.DATE_ADDED, dateFormat.format(date));
         contentValues.put(SecuraContract.UserGroupItemMap.DATE_MODIFIED, dateFormat.format(date));
-        contentValues.put(SecuraContract.UserGroupItemMap.DATA, AESHelper.encrypt(jo.toString()));
+        contentValues.put(SecuraContract.UserGroupItemMap.DATA, AESHelper.encrypt(jsonData));
         contentValues.put(SecuraContract.UserGroupItemMap.MAP_ID, groupID);
 
         db.insert(SecuraContract.UserGroupItemMap.TABLE_NAME, null, contentValues);
         db.close();
 
-        System.out.println("Fuck : " + jo);
         return 1;
     }
 

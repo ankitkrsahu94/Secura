@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.zip.Inflater;
 
@@ -157,19 +158,31 @@ public class GroupItems extends AppCompatActivity {
         alertDialog.setPositiveButton("Save",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if(infoCategory == 0){
+                        if(infoCategory == -1){
                             Toast.makeText(GroupItems.this, "No Data was provided", Toast.LENGTH_SHORT).show();
 
                         }
                         else{
                             pd.setMessage("Creating new group item");
+                            ArrayList<HashMap<String, String>> filledData = new ArrayList<HashMap<String, String>>();
                             LinearLayout ll = (LinearLayout) dialogView.findViewById(R.id.itemData);
-                            System.out.println("View : " + ll.getChildAt(infoCategory));
-                            System.out.println("Parsed Data : " + DataParser.llToMap(ll.getChildAt(infoCategory)));
-                        /*pd.show();
-                        new CreateGroupItem().execute();*/
+                            String jsonData, title;
+
+                            filledData.addAll(DataParser.llToMap(ll.getChildAt(0)));
+                            filledData.addAll(DataParser.llToMap(ll.getChildAt(infoCategory)));
+                            jsonData = DataParser.convertToJSON(filledData);
+                            //System.out.println("View : " + ll.getChildAt(infoCategory));
+                            System.out.println("Parsed Data : " + filledData);
+                            System.out.println("JSON DATA : " + jsonData);
+                            title = ((EditText)dialogView.findViewById(R.id.itemTitle)).getText().toString();
+                            if(title.equals("") || title.equals(" ")){
+                                Toast.makeText(GroupItems.this, "Please enter title for this item", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                new CreateGroupItem().execute(jsonData, title);
+                                dialog.cancel();
+                            }
                         }
-                        dialog.cancel();
                     }
                 });
 
@@ -189,21 +202,21 @@ public class GroupItems extends AppCompatActivity {
         protected String doInBackground(String... params) {
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
 
-            JSONObject jArrayItemData = new JSONObject();
+            /*JSONObject jArrayItemData = new JSONObject();
             JSONObject jObjectType = new JSONObject();
             try {
                 jObjectType.put("type", "facebook_login");
                 jArrayItemData.put("system", jObjectType);
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             // put elements into the object as a key-value pair
             //Toast.makeText(GroupItems.this, groupID+"in", Toast.LENGTH_SHORT).show();
             //pd.dismiss();
             //Log.e("Fuck : GroupID", groupID+"");
             try {
-                db.insertItem(groupID, "Item 1", jArrayItemData);
+                db.insertItem(groupID, params[1], params[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
