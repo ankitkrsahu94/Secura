@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -90,14 +91,53 @@ public class GroupItems extends AppCompatActivity {
     }
 
     private void createNewGroupItemDialog(){
-        //Toast.makeText(GroupItems.this, groupID, Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(GroupItems.this);
-        alertDialog.setTitle("Add new item");
-        //alertDialog.setMessage("Title");
-
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(GroupItems.this.LAYOUT_INFLATER_SERVICE);
         dialogView = inflater.inflate(R.layout.newgroupitem, null);
-        alertDialog.setView(dialogView);
+        final AlertDialog d = new AlertDialog.Builder(GroupItems.this)
+                .setView(dialogView)
+                .setTitle("Add new item")
+                .setPositiveButton("Save", null) //Set to null. We override the onclick
+                .setNegativeButton("Cancel", null)
+                .create();
+
+        d.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(final DialogInterface dialog) {
+
+                Button b = d.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        // TODO Do something
+                        if(infoCategory == 0){
+                            Toast.makeText(GroupItems.this, "Please select a category", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            LinearLayout ll = (LinearLayout) dialogView.findViewById(R.id.itemData);
+                            ArrayList<HashMap<String, String>> filledData = new ArrayList<>();
+                            String jsonData, title;
+                            title = ((EditText)dialogView.findViewById(R.id.itemTitle)).getText().toString();
+                            if(title.equals("") || title.equals(" ")){
+                                Toast.makeText(GroupItems.this, "Please enter title for this item", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                filledData.addAll(DataParser.llToMap(ll.getChildAt(0)));
+                                filledData.addAll(DataParser.llToMap(ll.getChildAt(infoCategory)));
+                                jsonData = DataParser.convertToJSON(filledData);
+                                System.out.println("Parsed Data : " + filledData);
+                                System.out.println("JSON DATA : " + jsonData);
+                                pd.setMessage("Creating new group item");
+                                new CreateGroupItem().execute(jsonData, title);
+                                dialog.dismiss();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        d.show();
 
         Spinner sp = (Spinner) dialogView.findViewById(R.id.itemType);
 
@@ -138,53 +178,6 @@ public class GroupItems extends AppCompatActivity {
 
             }
         });
-
-        /*final EditText input = new EditText(getApplicationContext());
-        input.setTextColor(Color.parseColor("#000000"));
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
-        alertDialog.setView(input);*/
-        //alertDialog.setIcon(R.drawable.key);
-        alertDialog.setPositiveButton("Save",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(infoCategory == 0){
-                            Toast.makeText(GroupItems.this, "Please select a category", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            pd.setMessage("Creating new group item");
-                            ArrayList<HashMap<String, String>> filledData = new ArrayList<>();
-                            LinearLayout ll = (LinearLayout) dialogView.findViewById(R.id.itemData);
-                            String jsonData, title;
-
-                            filledData.addAll(DataParser.llToMap(ll.getChildAt(0)));
-                            filledData.addAll(DataParser.llToMap(ll.getChildAt(infoCategory)));
-                            jsonData = DataParser.convertToJSON(filledData);
-                            //System.out.println("View : " + ll.getChildAt(infoCategory));
-                            System.out.println("Parsed Data : " + filledData);
-                            System.out.println("JSON DATA : " + jsonData);
-                            title = ((EditText)dialogView.findViewById(R.id.itemTitle)).getText().toString();
-                            if(title.equals("") || title.equals(" ")){
-                                Toast.makeText(GroupItems.this, "Please enter title for this item", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                new CreateGroupItem().execute(jsonData, title);
-                                dialog.dismiss();
-                            }
-                        }
-                    }
-                });
-
-        alertDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
-                    }
-                });
-
-        alertDialog.show();
     }
 
     private class CreateGroupItem extends AsyncTask<String, Void, String> {
