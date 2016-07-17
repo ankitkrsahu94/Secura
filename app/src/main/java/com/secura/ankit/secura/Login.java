@@ -189,14 +189,4 @@ public class Login extends Activity {
         @Override
         protected void onProgressUpdate(Void... values) {}
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e("App Paused", "");
-    }
-    protected void onStop() {
-        super.onStop();
-        Log.e("App stopeed", "");
-    }
 }
