@@ -8,11 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.secura.ankit.secura.DatabaseSchema.SecuraContract;
+import com.secura.ankit.secura.Session;
 import com.secura.ankit.secura.utils.AESHelper;
 
 import org.json.JSONObject;
 
 import java.security.AccessControlContext;
+import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,38 +50,49 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void insertUser(String email, String password){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(SecuraContract.UserTable.EMAIL_ID, email);
-        contentValues.put(SecuraContract.UserTable.PASSWORD, password);
-        db.insert(SecuraContract.UserTable.TABLE_NAME, null, contentValues);
-        //db.close();
+    public boolean createUser(String email, String password){
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(SecuraContract.UserTable.EMAIL_ID, email);
+            contentValues.put(SecuraContract.UserTable.PASSWORD, password);
+            db.insert(SecuraContract.UserTable.TABLE_NAME, null, contentValues);
+            db.close();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public int getUser(String email){
+    public int getUser(String email, String password){
+        //System.out.println("1. here");
         int userID = -1;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select user_id from " + SecuraContract.UserTable.TABLE_NAME + " where email_id = \"" + email + "\"", null);
+        Cursor res = db.rawQuery("select user_id from " + SecuraContract.UserTable.TABLE_NAME +
+                " where " + SecuraContract.UserTable.EMAIL_ID + " = \"" + email + "\" and " +
+                SecuraContract.UserTable.PASSWORD + "= \"" + password + "\"", null);
+        //System.out.println("2. here");
         if(res.getCount() > 0){
             res.moveToFirst();
             userID = res.getInt(res.getColumnIndex(SecuraContract.UserGroupMap.USER_ID));
         }
+        //System.out.println("3. here");
         //db.close();
         return userID;
     }
 
     public void createGroupMap(String groupName, String email){
-        int userID = getUser(email);
+        int userID = getUser(email, Session.getSessionKey());
         SQLiteDatabase db = this.getWritableDatabase();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         ContentValues contentValues = new ContentValues();
         Date date = new Date();
-
+/*
         if(userID == -1){
-            insertUser(email, "password");
+            createUser(email,);
             userID = getUser(email);
-        }
+        }*/
 
         contentValues.put(SecuraContract.UserGroupMap.GROUP_NAME, groupName);
         contentValues.put(SecuraContract.UserGroupMap.DATE_ADDED, dateFormat.format(date));
@@ -90,7 +103,7 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
 
     public int getGroupMapID(String groupName, String email){
         int mapID = -1;
-        int userID = getUser(email);
+        int userID = getUser(email, Session.getSessionKey());
 
         SQLiteDatabase db = this.getReadableDatabase();
         if(userID > -1){
@@ -133,20 +146,15 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         return 1;
     }
 
-    /*public ArrayList<String> getItems(){
+    public boolean checkExistingAccount(){
         SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<String> list = new ArrayList<>();
-        Cursor res = db.rawQuery("select * from " + SecuraContract.UserGroupItemMap.TABLE_NAME, null);
-
-        res.moveToFirst();
-        while(!res.isAfterLast()){
-            list.add(res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.ITEM_TITLE)));
-            res.moveToNext();
+        Cursor res = db.rawQuery("Select * from " + SecuraContract.UserTable.TABLE_NAME + " where 1", null);
+        if(res.getCount() > 0){
+            return true;
         }
-
         db.close();
-        return list;
-    }*/
+        return  false;
+    }
 
     public String getItemInfo(int item_id){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -206,7 +214,9 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
     public LinkedHashMap<Integer, String> getGroups(String email){
         SQLiteDatabase db = this.getReadableDatabase();
         LinkedHashMap<Integer, String> list = new LinkedHashMap<>();
-        int userID = getUser(email);
+        int userID = 0;
+        userID = getUser(email, Session.getSessionKey());
+
         int key;
         String val;
 

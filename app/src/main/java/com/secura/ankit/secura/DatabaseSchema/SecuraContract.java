@@ -15,7 +15,7 @@ public class SecuraContract {
         public static final String PASSWORD = "password";
 
         public static final String CREATE_USER_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + USER_ID +
-                " INTEGER PRIMARY KEY AUTOINCREMENT," + EMAIL_ID + " TEXT," + PASSWORD + " TEXT )";
+                " INTEGER PRIMARY KEY AUTOINCREMENT," + EMAIL_ID + " TEXT UNIQUE," + PASSWORD + " TEXT )";
     }
 
     /*public static abstract class Group implements BaseColumns{
