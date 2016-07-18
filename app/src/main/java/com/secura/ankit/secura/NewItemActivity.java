@@ -135,7 +135,7 @@ public class NewItemActivity extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.e("Fuck : ", group_list.toString());
+//            Log.e("Fuck : ", group_list.toString());
             group_list.add(group_list.size()-1,result);
             sp.setSelection(group_list.indexOf(result));
             pd.hide();

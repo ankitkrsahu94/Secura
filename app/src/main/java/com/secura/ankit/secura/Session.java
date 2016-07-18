@@ -3,6 +3,7 @@ package com.secura.ankit.secura;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.app.Activity;
 
@@ -46,15 +47,15 @@ public class Session {
     }
 
     public static boolean sessionExists(){
-        try{
-            if(!pref.getString(KEY_NAME,"").equals("")){
-                return true;
-            }
-        }catch (Exception e){
+        //System.out.print("Checking");
+        if(!pref.getString(KEY_NAME,"").equals("")){
+            return true;
+        }
+        else{
             Intent intent = new Intent(_context, Login.class);
             _context.startActivity(intent);
-            //e.printStackTrace();
         }
+
         return false;
     }
 

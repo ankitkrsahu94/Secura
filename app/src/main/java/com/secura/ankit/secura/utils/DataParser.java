@@ -36,15 +36,15 @@ public class DataParser {
             View childView = ll.getChildAt(i);
             if(childView instanceof LinearLayout){
                 ArrayList<HashMap<String, String>> childData = llToMap(childView);
-                System.out.println(" LL DATA : " + childData);
+//                System.out.println(" LL DATA : " + childData);
                 for(HashMap<String, String> row : childData){
                     layoutData.add(row);
                 }
             }
             else{
-                System.out.println("INELSE : ChildView : " + childView);
+//                System.out.println("INELSE : ChildView : " + childView);
                 if(childView instanceof TextView){
-                    System.out.println("Yes it is instance of TextView");
+//                    System.out.println("Yes it is instance of TextView");
                     HashMap<String, String> elem = new HashMap<>();
                     if(ll.getChildAt(i+1) instanceof EditText){
                         elem.put(((TextView) childView).getText().toString(), ((EditText) ll.getChildAt(i+1)).getText().toString());
@@ -71,10 +71,10 @@ public class DataParser {
             for(HashMap<String, String> row: data){
                 key = row.entrySet().iterator().next().getKey();
                 value = row.entrySet().iterator().next().getValue();
-                //System.out.println("ROW : " + row.entrySet().iterator().next().getKey());
+//                System.out.println("ROW : " + row.entrySet().iterator().next().getKey());
                 jArrayItemData.put(key, value);
             }
-            //jObjectType.put("type", "facebook_login");
+//            jObjectType.put("type", "facebook_login");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -2,13 +2,11 @@ package com.secura.ankit.secura;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +19,7 @@ import com.secura.ankit.secura.utils.AESHelper;
 import java.security.GeneralSecurityException;
 
 /**
- * Created by Vassar-Dell-4 on 17-Jul-16.
+ * Created by ankit on 17-Jul-16.
  */
 public class Login extends Activity {
 
@@ -72,6 +70,7 @@ public class Login extends Activity {
                 new UserLogin().execute(password);
             }
         });
+
     }
 
     private class Initialize extends AsyncTask<String, Void, String> {
@@ -134,6 +133,7 @@ public class Login extends Activity {
                 Toast.makeText(Login.this, "A new account cannot be created. Sorry for inconvenience caused.", Toast.LENGTH_SHORT).show();
             }
             pd.dismiss();
+            finish();
         }
 
         @Override
@@ -181,6 +181,7 @@ public class Login extends Activity {
                 startActivity(intent);
             }
             pd.dismiss();
+            finish();
         }
 
         @Override

@@ -186,25 +186,12 @@ public class GroupItems extends AppCompatActivity {
         protected String doInBackground(String... params) {
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
 
-            /*JSONObject jArrayItemData = new JSONObject();
-            JSONObject jObjectType = new JSONObject();
-            try {
-                jObjectType.put("type", "facebook_login");
-                jArrayItemData.put("system", jObjectType);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }*/
-
-            // put elements into the object as a key-value pair
-            //Toast.makeText(GroupItems.this, groupID+"in", Toast.LENGTH_SHORT).show();
-            //pd.dismiss();
-            //Log.e("Fuck : GroupID", groupID+"");
             try {
                 db.insertItem(groupID, params[1], params[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //group_list = db.getItems();
+
             return "";
         }
 
@@ -225,15 +212,7 @@ public class GroupItems extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            /*try{
-                getApplicationContext().deleteDatabase(SecuraDBHelper.DATABASE_NAME);
-            }catch (Exception e){
-                e.printStackTrace();
-            }*/
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
-            //db.createGroupMap("Group 1", SecuraDBHelper.email);
-            /*db.insertItem("Allahabad Bank");
-            db.insertItem("Axis Bank");*/
 
             /**
              * since all the group information is returned as <key,value> pair
@@ -241,12 +220,10 @@ public class GroupItems extends AppCompatActivity {
             result = db.getItems(groupID);
             list.clear();
             for (Object value : result.values()) {
-                //Log.e("D ID : ", value.toString());
+//                Log.e("D ID : ", value.toString());
                 list.add(value.toString());
-                // write your code here
             }
-            //list = db.getGroups(SecuraDBHelper.email);
-            //db.close();
+
             return "";
         }
 

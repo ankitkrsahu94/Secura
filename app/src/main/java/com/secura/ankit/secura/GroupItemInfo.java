@@ -63,7 +63,7 @@ public class GroupItemInfo extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            System.out.println("Fuck InDATA : " + result);
+//            System.out.println("Fuck InDATA : " + result);
             try {
                 /*String encrypted = u.encrypt(result);
                 System.out.println("Fuck encrypted : " + encrypted);*/

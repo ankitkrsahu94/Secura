@@ -163,7 +163,7 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
 
         if(res.getCount() > 0){
-            System.out.println("Fuck data : " + res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.DATA)));
+//            System.out.println("Fuck data : " + res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.DATA)));
             return res.getString(res.getColumnIndex(SecuraContract.UserGroupItemMap.DATA));
         }
         db.close();

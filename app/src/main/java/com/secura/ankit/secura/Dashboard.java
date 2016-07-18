@@ -2,6 +2,7 @@ package com.secura.ankit.secura;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
 
@@ -31,7 +33,6 @@ public class Dashboard extends AppCompatActivity {
     LinkedHashMap<Integer, String> result;
     ProgressDialog pd;
     ListView listView;
-    //Session session = new Session(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,6 @@ public class Dashboard extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GroupItems.class);
                 intent.putExtra("groupID", Integer.parseInt(result.keySet().toArray()[position].toString()));
                 startActivity(intent);
-                //Toast.makeText(Dashboard.this, result.keySet().toArray()[position].toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -71,12 +71,6 @@ public class Dashboard extends AppCompatActivity {
         pd.show();
 
         new FetchGroups().execute("");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        pd.dismiss();
     }
 
     private void createNewGroupDialog(){
@@ -91,7 +85,6 @@ public class Dashboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT);
         input.setLayoutParams(lp);
         alertDialog.setView(input);
-        //alertDialog.setIcon(R.drawable.key);
 
         alertDialog.setPositiveButton("Save",
                 new DialogInterface.OnClickListener() {
@@ -120,7 +113,6 @@ public class Dashboard extends AppCompatActivity {
         protected String doInBackground(String... params) {
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
             db.createGroupMap(params[0], SecuraDBHelper.email);
-            //group_list = db.getItems();
             return params[0];
         }
 
@@ -140,15 +132,7 @@ public class Dashboard extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            /*try{
-                getApplicationContext().deleteDatabase(SecuraDBHelper.DATABASE_NAME);
-            }catch (Exception e){
-                e.printStackTrace();
-            }*/
             SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
-            //db.createGroupMap("Group 1", SecuraDBHelper.email);
-            /*db.insertItem("Allahabad Bank");
-            db.insertItem("Axis Bank");*/
 
             /**
              * since all the group information is returned as <key,value> pair
@@ -156,12 +140,9 @@ public class Dashboard extends AppCompatActivity {
             result = db.getGroups(SecuraDBHelper.email);
             list.clear();
             for (Object value : result.values()) {
-                //Log.e("D ID : ", value.toString());
                 list.add(value.toString());
-                // write your code here
             }
-            //list = db.getGroups(SecuraDBHelper.email);
-            //db.close();
+            db.close();
             return "";
         }
 
@@ -205,5 +186,57 @@ public class Dashboard extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*public void onStart() {
+        super.onStart();
+        tToast("onStart");
+        doesSessionExists();
+    }
+
+    public void onRestart() {
+        super.onRestart();
+        tToast("onRestart");
+        doesSessionExists();
+    }
+
+    public void onResume() {
+        super.onResume();
+        tToast("onResume");
+        doesSessionExists();
+    }
+
+    public void onPause() {
+        super.onPause();
+        tToast("onPause: bye bye!");
+        destroySession();
+    }
+
+    public void onStop() {
+        super.onStop();
+        tToast("onStop.");
+        destroySession();
+    }
+*/
+    public void onDestroy() {
+        super.onStop();
+        Log.e("onDestroy..","");
+        tToast("onDestroy.");
+        destroySession();
+    }
+
+    private void destroySession() {
+        Session.destroySession();
+    }
+
+    private void doesSessionExists() {
+        Session.sessionExists();
+    }
+
+    private void tToast(String s) {
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, s, duration);
+        toast.show();
     }
 }
