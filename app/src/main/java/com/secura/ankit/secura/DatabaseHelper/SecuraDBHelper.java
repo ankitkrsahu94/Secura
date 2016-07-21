@@ -5,20 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.secura.ankit.secura.DatabaseSchema.SecuraContract;
-import com.secura.ankit.secura.Session;
+import com.secura.ankit.secura.utils.Session;
 import com.secura.ankit.secura.utils.AESHelper;
 
-import org.json.JSONObject;
-
-import java.security.AccessControlContext;
-import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**

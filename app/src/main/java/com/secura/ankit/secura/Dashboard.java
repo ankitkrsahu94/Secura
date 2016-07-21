@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +28,7 @@ import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class Dashboard extends AppCompatActivity {
+public class Dashboard extends BaseAppCompatActivity {
 
     ArrayList<String> list = new ArrayList<>();
     LinkedHashMap<Integer, String> result;
@@ -186,57 +187,5 @@ public class Dashboard extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /*public void onStart() {
-        super.onStart();
-        tToast("onStart");
-        doesSessionExists();
-    }
-
-    public void onRestart() {
-        super.onRestart();
-        tToast("onRestart");
-        doesSessionExists();
-    }
-
-    public void onResume() {
-        super.onResume();
-        tToast("onResume");
-        doesSessionExists();
-    }
-
-    public void onPause() {
-        super.onPause();
-        tToast("onPause: bye bye!");
-        destroySession();
-    }
-
-    public void onStop() {
-        super.onStop();
-        tToast("onStop.");
-        destroySession();
-    }
-*/
-    public void onDestroy() {
-        super.onStop();
-        Log.e("onDestroy..","");
-        tToast("onDestroy.");
-        destroySession();
-    }
-
-    private void destroySession() {
-        Session.destroySession();
-    }
-
-    private void doesSessionExists() {
-        Session.sessionExists();
-    }
-
-    private void tToast(String s) {
-        Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, s, duration);
-        toast.show();
     }
 }

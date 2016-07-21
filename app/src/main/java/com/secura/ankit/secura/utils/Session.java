@@ -1,4 +1,4 @@
-package com.secura.ankit.secura;
+package com.secura.ankit.secura.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.app.Activity;
+
+import com.secura.ankit.secura.Login;
 
 /**
  * Created by Vassar-Dell-4 on 17-Jul-16.
@@ -49,11 +51,8 @@ public class Session {
     public static boolean sessionExists(){
         //System.out.print("Checking");
         if(!pref.getString(KEY_NAME,"").equals("")){
+            System.out.println("Yes session Exists");
             return true;
-        }
-        else{
-            Intent intent = new Intent(_context, Login.class);
-            _context.startActivity(intent);
         }
 
         return false;
@@ -69,5 +68,10 @@ public class Session {
     }
     public static void destroySession(){
         pref.edit().clear().commit();
+    }
+
+    public static void RedirectToLogin(){
+        Intent intent = new Intent(_context, Login.class);
+        _context.startActivity(intent);
     }
 }

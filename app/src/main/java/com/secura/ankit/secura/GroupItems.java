@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class GroupItems extends AppCompatActivity {
+public class GroupItems extends BaseAppCompatActivity {
 
     ArrayList<String> list = new ArrayList<String>();
     ProgressDialog pd;

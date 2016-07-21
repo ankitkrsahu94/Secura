@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
 import com.secura.ankit.secura.utils.AESHelper;
+import com.secura.ankit.secura.utils.Session;
 
 import java.security.GeneralSecurityException;
 
