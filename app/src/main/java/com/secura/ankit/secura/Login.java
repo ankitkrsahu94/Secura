@@ -180,9 +180,10 @@ public class Login extends Activity {
                 pd.dismiss();
                 Intent intent = new Intent(Login.this, Dashboard.class);
                 startActivity(intent);
+                finish();
             }
             pd.dismiss();
-            finish();
+
         }
 
         @Override

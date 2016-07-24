@@ -24,8 +24,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     private Runnable disconnectCallback = new Runnable() {
         @Override
         public void run() {
-            Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_SHORT).show();
-            Session.destroySession();
+//            Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_SHORT).show();
+            // Session.destroySession();
             checkSessionAlive();
             // Perform any required operation on disconnect
         }
