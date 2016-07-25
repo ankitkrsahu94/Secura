@@ -71,7 +71,8 @@ public class Session {
     }
 
     public static void RedirectToLogin(){
+        ((Activity) _context).finish();/*
         Intent intent = new Intent(_context, Login.class);
-        _context.startActivity(intent);
+        _context.startActivity(intent);*/
     }
 }

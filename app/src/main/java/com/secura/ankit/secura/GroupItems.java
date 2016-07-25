@@ -1,5 +1,9 @@
 package com.secura.ankit.secura;
 
+/**
+ * This activity is not being used anymore
+ */
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -7,8 +11,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -16,6 +21,8 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,16 +30,21 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
+import com.secura.ankit.secura.utils.AESHelper;
 import com.secura.ankit.secura.utils.DataParser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 public class GroupItems extends BaseAppCompatActivity {
 
     ArrayList<String> list = new ArrayList<String>();
-    ProgressDialog pd;
     ListView listView;
     int groupID, infoCategory;
     View dialogView;
@@ -66,9 +78,15 @@ public class GroupItems extends BaseAppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(GroupItems.this, listView.getItemAtPosition(position)+" info", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), GroupItemInfo.class);
+
+                pd = new ProgressDialog(GroupItems.this);
+                pd.show();
+                new FetchItemInfo().execute(result.keySet().toArray()[position].toString());
+
+                /*Intent intent = new Intent(getApplicationContext(), GroupItemInfo.class);
                 intent.putExtra("map_ID", Integer.parseInt(result.keySet().toArray()[position].toString()));
-                startActivity(intent);
+                startActivity(intent);*/
+
                 /*Intent intent = new Intent(getApplicationContext(), GroupItems.class);
                 intent.putExtra("groupID", 1);
                 startActivity(intent);
@@ -99,6 +117,20 @@ public class GroupItems extends BaseAppCompatActivity {
                 .setPositiveButton("Save", null) //Set to null. We override the onclick
                 .setNegativeButton("Cancel", null)
                 .create();
+
+        /*final EditText pwd = (EditText) findViewById(R.id.password);
+        final CheckBox cb = (CheckBox) findViewById(R.id.showPassword);
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(cb.isChecked()){
+                    pwd.setTransformationMethod(null);
+                }
+                else{
+                    pwd.setTransformationMethod(new PasswordTransformationMethod());
+                }
+            }
+        });*/
 
         d.setOnShowListener(new DialogInterface.OnShowListener() {
 
@@ -254,23 +286,91 @@ public class GroupItems extends BaseAppCompatActivity {
         new FetchItems().execute("");
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private class FetchItemInfo extends AsyncTask<String, Void, String> {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        @Override
+        protected String doInBackground(String... params) {
+            /*try{
+                getApplicationContext().deleteDatabase(SecuraDBHelper.DATABASE_NAME);
+            }catch (Exception e){
+                e.printStackTrace();
+            }*/
+            String result;
+            SecuraDBHelper db = new SecuraDBHelper(getApplicationContext());
+            //db.createGroupMap("Group 1", SecuraDBHelper.email);
+            /*db.insertItem("Allahabad Bank");
+            db.insertItem("Axis Bank");*/
+
+            /**
+             * since all the group information is returned as <key,value> pair
+             */
+            result = db.getItemInfo(Integer.valueOf(params[0]));
+            //list = db.getGroups(SecuraDBHelper.email);
+            //db.close();
+            return result;
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        protected void onPostExecute(String result) {
+//            System.out.println("Fuck InDATA : " + result);
+            String decrypted = null;
+            String finalData = "";
+            try {
+                decrypted = AESHelper.decrypt(result);
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(decrypted);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Iterator<String> iter = jsonObject.keys();
+            while (iter.hasNext()) {
+                String key = iter.next();
+                try {
+                    finalData += Html.fromHtml("<b>" + key + " : </b>" + jsonObject.get(key) + "<br/>");
+                    /*Object value = jsonObject.get(key);
+                    System.out.println(value);*/
+                } catch (JSONException e) {
+                    // Something went wrong!
+                }
+            }
+            AlertDialog alertDialog = new AlertDialog.Builder(GroupItems.this).create();
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Edit",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",
+                    new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.setMessage(finalData);
+            alertDialog.show();
+            pd.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
     }
 
     public void listItemClickListener(ArrayAdapter adapter, View v, int position,
                                       long arg3) {
         Toast.makeText(getApplicationContext(), adapter.getItem(position).toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(GroupItems.this, Dashboard.class);
+        startActivity(intent);
     }
 }

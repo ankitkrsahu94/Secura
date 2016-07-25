@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
+import com.secura.ankit.secura.utils.Session;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,8 +33,9 @@ public class Dashboard extends BaseAppCompatActivity {
 
     ArrayList<String> list = new ArrayList<>();
     LinkedHashMap<Integer, String> result;
-    ProgressDialog pd;
     ListView listView;
+    boolean doubleBackToExitPressedOnce = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +66,14 @@ public class Dashboard extends BaseAppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GroupItems.class);
                 intent.putExtra("groupID", Integer.parseInt(result.keySet().toArray()[position].toString()));
                 startActivity(intent);
+                pd.cancel();
+                finish();
             }
         });
 
         pd = new ProgressDialog(this);
         pd.setMessage("Fetching Data");
         pd.show();
-
         new FetchGroups().execute("");
     }
 
@@ -162,30 +165,27 @@ public class Dashboard extends BaseAppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
-        return true;
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         new FetchGroups().execute("");
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finish();
         }
 
-        return super.onOptionsItemSelected(item);
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 3000);
     }
 }

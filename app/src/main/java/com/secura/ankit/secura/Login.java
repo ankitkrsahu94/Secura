@@ -177,10 +177,11 @@ public class Login extends Activity {
             }
             else{
                 //alertDialog.setMessage("Authentication Successfull");
-                pd.dismiss();
+                ((EditText)findViewById(R.id.loginPass)).setText("");
                 Intent intent = new Intent(Login.this, Dashboard.class);
+                pd.dismiss();
                 startActivity(intent);
-                finish();
+                //finish();
             }
             pd.dismiss();
 

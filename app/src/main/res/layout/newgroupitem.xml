@@ -67,12 +67,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Password" />
+                android:text="Password"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/password"/>
+                android:id="@+id/password"
+                android:inputType="textPassword"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -98,7 +99,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardNo"/>
+                android:id="@+id/cardNo"
+                android:inputType="number"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -128,7 +130,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/cvv"
                     android:hint="CVV"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:inputType="number"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -147,7 +150,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/expMonth"
-                        android:hint="Month"/>
+                        android:hint="MM"
+                        android:inputType="number"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -159,7 +163,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/expYear"
-                        android:hint="Year"/>
+                        android:hint="YYYY"
+                        android:inputType="number"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -173,7 +178,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:id="@+id/pin"
-                android:hint="PIN"/>
+                android:hint="PIN"
+                android:inputType="number"/>
 
         </LinearLayout>
         <LinearLayout
