@@ -75,6 +75,22 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         return userID;
     }
 
+    public boolean updateUserPassword(String email, String password, String newPassword){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "update " + SecuraContract.UserTable.TABLE_NAME +
+                " set " + SecuraContract.UserTable.PASSWORD + " = \"" + newPassword +
+                "\" where " + SecuraContract.UserTable.EMAIL_ID + " = \"" + email + "\"";
+
+        System.out.println(query);
+        try{
+            db.execSQL(query);
+        }catch (Exception e){
+
+            return false;
+        }
+        return true;
+    }
     public void createGroupMap(String groupName, String email){
         int userID = getUser(email, Session.getSessionKey());
         SQLiteDatabase db = this.getWritableDatabase();

@@ -2,6 +2,7 @@ package com.secura.ankit.secura;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -121,6 +122,9 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         if (id == R.id.logout) {
             Session.destroySession();
             finish();
+        }
+        else if (id == R.id.changePassword) {
+            startActivity(new Intent(this, ChangePassword.class));
         }
         else{
             return true;

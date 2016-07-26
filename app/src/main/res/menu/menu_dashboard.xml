@@ -8,6 +8,11 @@
         android:title="About Us"
         app:showAsAction="never" />
     <item
+        android:id="@+id/changePassword"
+        android:orderInCategory="100"
+        android:title="Change Password"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/logout"
         android:orderInCategory="100"
         android:title="Logout"
