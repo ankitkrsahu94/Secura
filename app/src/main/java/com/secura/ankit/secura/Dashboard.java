@@ -2,7 +2,6 @@ package com.secura.ankit.secura;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -35,7 +33,6 @@ public class Dashboard extends BaseAppCompatActivity {
     LinkedHashMap<Integer, String> result;
     ListView listView;
     boolean doubleBackToExitPressedOnce = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +63,7 @@ public class Dashboard extends BaseAppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GroupItems.class);
                 intent.putExtra("groupID", Integer.parseInt(result.keySet().toArray()[position].toString()));
                 startActivity(intent);
-                pd.cancel();
+                pd.dismiss();
                 finish();
             }
         });
@@ -187,5 +184,11 @@ public class Dashboard extends BaseAppCompatActivity {
                 doubleBackToExitPressedOnce=false;
             }
         }, 3000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        pd.dismiss();
     }
 }

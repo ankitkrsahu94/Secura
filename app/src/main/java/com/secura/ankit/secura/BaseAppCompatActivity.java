@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.secura.ankit.secura.utils.Session;
 
+import java.util.List;
+
 /**
  * Created by ankit on 21/7/16.
  */
@@ -70,6 +72,7 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         //Toast.makeText(getApplicationContext(), String.valueOf(appInForeground), Toast.LENGTH_SHORT).show();
         appInForeground = true;
         resetDisconnectTimer();
+        checkSessionAlive();
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.app.Activity;
+import android.util.Log;
 
 import com.secura.ankit.secura.Login;
 
@@ -51,7 +52,7 @@ public class Session {
     public static boolean sessionExists(){
         //System.out.print("Checking");
         if(!pref.getString(KEY_NAME,"").equals("")){
-            System.out.println("Yes session Exists");
+            System.out.println("Session is active");
             return true;
         }
 
@@ -68,6 +69,7 @@ public class Session {
     }
     public static void destroySession(){
         pref.edit().clear().commit();
+        Log.e("Session Destroyed", "");
     }
 
     public static void RedirectToLogin(){

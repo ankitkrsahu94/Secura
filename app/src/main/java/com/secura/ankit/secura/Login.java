@@ -184,7 +184,6 @@ public class Login extends Activity {
                 //finish();
             }
             pd.dismiss();
-
         }
 
         @Override
