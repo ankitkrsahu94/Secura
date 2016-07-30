@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.secura.ankit.secura.DatabaseHelper.SecuraDBHelper;
 import com.secura.ankit.secura.utils.AESHelper;
+import com.secura.ankit.secura.utils.Messaging;
 import com.secura.ankit.secura.utils.Session;
 
 import java.security.GeneralSecurityException;
@@ -151,7 +152,6 @@ public class Login extends Activity {
         protected String doInBackground(String... params) {
             SecuraDBHelper db = new SecuraDBHelper(Login.this);
             int userID = -1;
-            //System.out.println("DOINBACK");
             try {
                 String encPass = AESHelper.encrypt(params[0]);
                 userID = db.getUser(SecuraDBHelper.email, encPass);
@@ -165,19 +165,10 @@ public class Login extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            AlertDialog alertDialog = new AlertDialog.Builder(Login.this).create();
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
             if(Integer.parseInt(result) == -1){
-                alertDialog.setMessage("Authentication Failed");
-                alertDialog.show();
+                Messaging.errorMessage("Authentication Failed", Login.this);
             }
             else{
-                //alertDialog.setMessage("Authentication Successfull");
                 ((EditText)findViewById(R.id.loginPass)).setText("");
                 Intent intent = new Intent(Login.this, Dashboard.class);
                 pd.dismiss();

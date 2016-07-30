@@ -64,13 +64,7 @@ public class GroupItems extends BaseAppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(GroupItems.this, groupID+"", Toast.LENGTH_SHORT).show();
                 createNewGroupItemDialog();
-                /*Intent intent = new Intent(getApplicationContext(), NewItemActivity.class);
-                intent.putStringArrayListExtra("GROUP_LIST", list);
-                startActivityForResult(intent,1);*/
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
             }
         });
 
@@ -82,15 +76,6 @@ public class GroupItems extends BaseAppCompatActivity {
                 pd = new ProgressDialog(GroupItems.this);
                 pd.show();
                 new FetchItemInfo().execute(result.keySet().toArray()[position].toString());
-
-                /*Intent intent = new Intent(getApplicationContext(), GroupItemInfo.class);
-                intent.putExtra("map_ID", Integer.parseInt(result.keySet().toArray()[position].toString()));
-                startActivity(intent);*/
-
-                /*Intent intent = new Intent(getApplicationContext(), GroupItems.class);
-                intent.putExtra("groupID", 1);
-                startActivity(intent);
-                Toast.makeText(GroupItems.this, parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();*/
             }
         });
 
@@ -117,20 +102,6 @@ public class GroupItems extends BaseAppCompatActivity {
                 .setPositiveButton("Save", null) //Set to null. We override the onclick
                 .setNegativeButton("Cancel", null)
                 .create();
-
-        /*final EditText pwd = (EditText) findViewById(R.id.password);
-        final CheckBox cb = (CheckBox) findViewById(R.id.showPassword);
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(cb.isChecked()){
-                    pwd.setTransformationMethod(null);
-                }
-                else{
-                    pwd.setTransformationMethod(new PasswordTransformationMethod());
-                }
-            }
-        });*/
 
         d.setOnShowListener(new DialogInterface.OnShowListener() {
 

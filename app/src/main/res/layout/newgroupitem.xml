@@ -72,8 +72,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/password"
-                android:inputType="textPassword"/>
+                android:id="@+id/password"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -209,7 +208,6 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
                 android:ems="10"
                 android:id="@+id/editText" />
 
@@ -223,7 +221,6 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
                 android:ems="10"
                 android:id="@+id/editText2" />
 
@@ -237,7 +234,6 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
                 android:ems="10"
                 android:id="@+id/editText3" />
 

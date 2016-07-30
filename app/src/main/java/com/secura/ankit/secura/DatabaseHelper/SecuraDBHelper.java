@@ -43,6 +43,17 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
 
     }
 
+    public int getGroupIDFromName(String groupName){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int groupID = -1;
+        Cursor res = db.rawQuery("select " + SecuraContract.UserGroupMap.GROUP_ID + " from " + SecuraContract.UserGroupMap.TABLE_NAME +
+                " where " + SecuraContract.UserGroupMap.GROUP_NAME + " = \"" + groupName + "\"", null);
+        if(res.getCount() > 0){
+            res.moveToFirst();
+            groupID = res.getInt(res.getColumnIndex(SecuraContract.UserGroupMap.GROUP_ID));
+        }
+        return groupID;
+    }
     public boolean createUser(String email, String password){
         try{
             SQLiteDatabase db = this.getWritableDatabase();
@@ -75,6 +86,60 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         return userID;
     }
 
+    public boolean updateGroupInfo(String oldName, String newName){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "update " + SecuraContract.UserGroupMap.TABLE_NAME +
+                " set " + SecuraContract.UserGroupMap.GROUP_NAME + " = \"" + newName +
+                "\" where " + SecuraContract.UserGroupMap.GROUP_NAME + " = \"" + oldName + "\"";
+
+        try{
+            db.execSQL(query);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean removeGroup(String groupName){
+        /**
+         * First delete all the child of a group then the group itself.
+         */
+        SQLiteDatabase db = this.getWritableDatabase();
+        int map_id;
+        map_id = getGroupIDFromName(groupName);
+
+        if(map_id == -1){
+            return false;   //Group does not exist
+        }
+        else{
+            db.beginTransaction();
+            String query = "delete from " + SecuraContract.UserGroupItemMap.TABLE_NAME +
+                    " where " + SecuraContract.UserGroupItemMap.MAP_ID + " = " + map_id;
+
+            try{
+                db.execSQL(query);
+            }catch (Exception e){
+                e.printStackTrace();
+                return false;
+            }
+
+            query = "delete from " + SecuraContract.UserGroupMap.TABLE_NAME +
+                    " where " + SecuraContract.UserGroupMap.GROUP_ID + " = " + map_id;
+
+            try{
+                db.execSQL(query);
+            }catch (Exception e){
+                e.printStackTrace();
+                return false;
+            }
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        }
+        return true;
+    }
+
     public boolean updateUserPassword(String email, String password, String newPassword){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -82,32 +147,33 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
                 " set " + SecuraContract.UserTable.PASSWORD + " = \"" + newPassword +
                 "\" where " + SecuraContract.UserTable.EMAIL_ID + " = \"" + email + "\"";
 
-        System.out.println(query);
+//        System.out.println(query);
         try{
             db.execSQL(query);
         }catch (Exception e){
-
+            e.printStackTrace();
             return false;
         }
         return true;
     }
-    public void createGroupMap(String groupName, String email){
+    public boolean createGroup(String groupName, String email){
         int userID = getUser(email, Session.getSessionKey());
         SQLiteDatabase db = this.getWritableDatabase();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         ContentValues contentValues = new ContentValues();
         Date date = new Date();
-/*
-        if(userID == -1){
-            createUser(email,);
-            userID = getUser(email);
-        }*/
 
         contentValues.put(SecuraContract.UserGroupMap.GROUP_NAME, groupName);
         contentValues.put(SecuraContract.UserGroupMap.DATE_ADDED, dateFormat.format(date));
         contentValues.put(SecuraContract.UserGroupMap.USER_ID, userID);
-        db.insert(SecuraContract.UserGroupMap.TABLE_NAME, null, contentValues);
+        try{
+            db.insert(SecuraContract.UserGroupMap.TABLE_NAME, null, contentValues);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
         db.close();
+        return true;
     }
 
     public int getGroupMapID(String groupName, String email){
@@ -131,13 +197,6 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
 
 
     public int insertItem(int groupID, String itemName, String jsonData) throws Exception {
-        //int mapID;
-        /*insertUser(email, "password");
-        getUser(email);
-        createGroupMap("TestGroup 1", email);
-        createGroupMap("TestGroup 2", email);
-        mapID = getGroupMapID("TestGroup 1", "testuser@xyz.com");*/
-        //AESHelper aesHelper = new AESHelper();
         SQLiteDatabase db = this.getWritableDatabase();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
