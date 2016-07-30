@@ -32,7 +32,7 @@ public class Dashboard extends BaseAppCompatActivity {
     ArrayList<String> list = new ArrayList<>();
     LinkedHashMap<Integer, String> result;
     ListView listView;
-    String selectedGroupName;
+    int selectedGroupID;
     boolean doubleBackToExitPressedOnce = false;
     ArrayAdapter adapter;
 
@@ -71,7 +71,7 @@ public class Dashboard extends BaseAppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedGroupName = listView.getItemAtPosition(position).toString();
+                selectedGroupID = Integer.parseInt(result.keySet().toArray()[position].toString());
                 registerForContextMenu(listView);
                 return false;
             }
@@ -109,9 +109,9 @@ public class Dashboard extends BaseAppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         int menuItemIndex = item.getItemId();
-        String[] menuItems = {"Rename", "Delete"};
+//        String[] menuItems = {"Rename", "Delete"};
 
         switch (menuItemIndex){
             case 0:
@@ -122,10 +122,9 @@ public class Dashboard extends BaseAppCompatActivity {
 //                warningMessage("This action cannot be reverted. Are you sure you want to delete this ?", Dashboard.this);
                 break;
         }
-        String menuItemName = menuItems[menuItemIndex];
-        String listItemName = listView.getItemAtPosition(info.position).toString();
-
-        Toast.makeText(Dashboard.this, menuItemName + " for " + listItemName, Toast.LENGTH_SHORT).show();
+//        String menuItemName = menuItems[menuItemIndex];
+//        String listItemName = listView.getItemAtPosition(info.position).toString();
+//        Toast.makeText(Dashboard.this, menuItemName + " for " + listItemName, Toast.LENGTH_SHORT).show();
         return true;
     }
 
@@ -152,8 +151,8 @@ public class Dashboard extends BaseAppCompatActivity {
                 break;
 
             case 2:
-                boxTitle = "Alert!!!";
-                fieldTitle = "You are about to delete a group which will cause every element inside this group be removed permanently as well. Items once deleted cannot be reverted. Are you sure you want to delete this ?";
+                boxTitle = "Alert !!!";
+                fieldTitle = "You are about to delete a group which will cause every element inside this group to be removed permanently as well. Items once deleted cannot be reverted. Are you sure you want to delete this ?";
                 positiveButtonLabel = "Delete";
                 break;
 
@@ -212,10 +211,10 @@ public class Dashboard extends BaseAppCompatActivity {
                     success = db.createGroup(params[1], SecuraDBHelper.email);
                     break;
                 case 1:
-                    success = db.updateGroupInfo(selectedGroupName, params[1]);
+                    success = db.updateGroupInfo(selectedGroupID, params[1]);
                     break;
                 case 2:
-                    success = db.removeGroup(selectedGroupName);
+                    success = db.removeGroup(selectedGroupID);
                     break;
             }
 

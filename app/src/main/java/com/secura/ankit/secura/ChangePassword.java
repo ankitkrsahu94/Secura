@@ -129,7 +129,7 @@ public class ChangePassword extends BaseAppCompatActivity {
                 pd.setMessage("Updating Password");
                 String oldPass = ((EditText) findViewById(R.id.currentPassword)).getText().toString();
                 String newPass = ((EditText) findViewById(R.id.newPassword)).getText().toString();
-                new UpdatePassword().execute(oldPass, newPass);
+                new UpdatePassword().execute(newPass);
             }
         }
 
@@ -148,9 +148,8 @@ public class ChangePassword extends BaseAppCompatActivity {
             boolean result = false;
             //System.out.println("DOINBACK");
             try {
-                String oldPass = AESHelper.encrypt(params[0]);
-                String newPass = AESHelper.encrypt(params[1]);
-                result = db.updateUserPassword(SecuraDBHelper.email, oldPass, newPass);
+                String newPass = AESHelper.encrypt(params[0]);
+                result = db.updateUserPassword(SecuraDBHelper.email, newPass);
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             }

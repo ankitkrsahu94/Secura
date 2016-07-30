@@ -86,12 +86,12 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         return userID;
     }
 
-    public boolean updateGroupInfo(String oldName, String newName){
+    public boolean updateGroupInfo(int groupID, String newName){
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "update " + SecuraContract.UserGroupMap.TABLE_NAME +
                 " set " + SecuraContract.UserGroupMap.GROUP_NAME + " = \"" + newName +
-                "\" where " + SecuraContract.UserGroupMap.GROUP_NAME + " = \"" + oldName + "\"";
+                "\" where " + SecuraContract.UserGroupMap.GROUP_ID + " = " + groupID;
 
         try{
             db.execSQL(query);
@@ -102,45 +102,41 @@ public class SecuraDBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean removeGroup(String groupName){
+    public boolean removeGroup(int groupID){
         /**
          * First delete all the child of a group then the group itself.
          */
+        boolean failure = false;
         SQLiteDatabase db = this.getWritableDatabase();
-        int map_id;
-        map_id = getGroupIDFromName(groupName);
 
-        if(map_id == -1){
-            return false;   //Group does not exist
+        db.beginTransaction();
+        String query = "delete from " + SecuraContract.UserGroupItemMap.TABLE_NAME +
+                " where " + SecuraContract.UserGroupItemMap.MAP_ID + " = " + groupID;
+
+        try{
+            db.execSQL(query);
+        }catch (Exception e){
+            failure = true;
+            e.printStackTrace();
         }
-        else{
-            db.beginTransaction();
-            String query = "delete from " + SecuraContract.UserGroupItemMap.TABLE_NAME +
-                    " where " + SecuraContract.UserGroupItemMap.MAP_ID + " = " + map_id;
 
-            try{
-                db.execSQL(query);
-            }catch (Exception e){
-                e.printStackTrace();
-                return false;
-            }
+        query = "delete from " + SecuraContract.UserGroupMap.TABLE_NAME +
+                " where " + SecuraContract.UserGroupMap.GROUP_ID + " = " + groupID;
 
-            query = "delete from " + SecuraContract.UserGroupMap.TABLE_NAME +
-                    " where " + SecuraContract.UserGroupMap.GROUP_ID + " = " + map_id;
-
-            try{
-                db.execSQL(query);
-            }catch (Exception e){
-                e.printStackTrace();
-                return false;
-            }
+        try{
+            db.execSQL(query);
+        }catch (Exception e){
+            failure = true;
+            e.printStackTrace();
+        }
+        if(!failure){
             db.setTransactionSuccessful();
-            db.endTransaction();
         }
+        db.endTransaction();
         return true;
     }
 
-    public boolean updateUserPassword(String email, String password, String newPassword){
+    public boolean updateUserPassword(String email, String newPassword){
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "update " + SecuraContract.UserTable.TABLE_NAME +
